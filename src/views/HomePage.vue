@@ -10,16 +10,18 @@
         </div>
 
         <div v-else>
-            <p>Welcome back, {{ authStore.user?.firstName }} {{ authStore.user?.lastName }}! Points: {{
-                authStore.user?.points }}</p>
-            <p>Your role: {{ authStore.user?.role }}</p>
+            <p>Welcome back, {{ userInfo?.firstName }} {{ userInfo?.lastName }}! Points: {{
+                userInfo?.points }}</p>
+            <p>Your role: {{ userInfo?.role }}</p>
             <button @click="authStore.logout">Logout</button>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '../stores/authStore'
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
+const userInfo = computed(() => authStore.user)
 </script>

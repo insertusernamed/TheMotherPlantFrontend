@@ -1,75 +1,62 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { User, LoginRequest, CreateUserRequest } from '@/models/User'
+import apiClient from '@/utils/apiClient'
+import type { User, LoginRequest, CreateUserRequest, AuthResponse } from '@/models/User'
 
-export const useAuthStore = defineStore('auth', () => {
-    const user = ref<User | null>(null)
-    const token = ref<string | null>(localStorage.getItem('token'))
+export const useAuthStore = defineStore('auth', {
+    state: () => ({
+        user: null as User | null,
+        token: localStorage.getItem('token') as string | null
+    }),
 
-    const isLoggedIn = computed(() => !!token.value)
+    getters: {
+        isLoggedIn: (state) => !!state.token
+    },
 
-    const login = async (loginData: LoginRequest) => {
-        const response = await fetch(import.meta.env.VITE_API_LOGIN, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(loginData),
-        })
+    actions: {
+        async login(loginData: LoginRequest) {
+            const { data } = await apiClient.post<AuthResponse>(import.meta.env.VITE_API_LOGIN, loginData)
 
-        if (!response.ok) {
-            throw new Error('Login failed')
+            this.token = data.token;
+            this.user = {
+                id: data.id,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                points: data.points,
+                role: data.role
+            }
+            localStorage.setItem('token', data.token);
+        },
+
+        async register(registerData: CreateUserRequest) {
+            const { data } = await apiClient.post<AuthResponse>(import.meta.env.VITE_API_REGISTER, registerData);
+
+            this.token = data.token;
+            this.user = {
+                id: data.id,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                points: data.points,
+                role: data.role
+            }
+            localStorage.setItem('token', data.token);
+        },
+
+        async fetchUser() {
+            try {
+                const { data } = await apiClient.get<User>(import.meta.env.VITE_API_USER_INFO);
+                this.user = data;
+                console.log('User fetched:', this.user);
+            } catch (error) {
+                console.error('Failed to fetch user:', error);
+            }
+        },
+
+        logout() {
+            this.user = null
+            this.token = null
+            localStorage.removeItem('token')
         }
-
-        const data = await response.json()
-        token.value = data.token
-        localStorage.setItem('token', data.token)
-
-        user.value = {
-            firstName: data.firstName || '',
-            lastName: data.lastName || '',
-            email: loginData.email,
-            points: data.points || 0,
-            role: data.role || 'USER'
-        }
-    }
-
-    const register = async (registerData: CreateUserRequest) => {
-        const response = await fetch(import.meta.env.VITE_API_REGISTER, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(registerData),
-        })
-
-        if (!response.ok) {
-            throw new Error('Registration failed')
-        }
-
-        const data = await response.json()
-        token.value = data.token
-        localStorage.setItem('token', data.token)
-
-        user.value = {
-            firstName: registerData.firstName,
-            lastName: registerData.lastName,
-            email: registerData.email
-        }
-    }
-
-    const logout = () => {
-        user.value = null
-        token.value = null
-        localStorage.removeItem('token')
-    }
-
-    return {
-        user,
-        token,
-        isLoggedIn,
-        login,
-        register,
-        logout
     }
 })

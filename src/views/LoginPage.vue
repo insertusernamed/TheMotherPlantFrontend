@@ -64,6 +64,7 @@ const handleLogin = async () => {
             email: loginForm.email,
             password: loginForm.password
         })
+        console.log('Login completed, user in store:', authStore.user)
         router.push('/')
     } catch (err) {
         error.value = 'Login failed. Please check your credentials.'

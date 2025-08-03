@@ -1,9 +1,10 @@
 export interface User {
+    id: number
     firstName: string
     lastName: string
     email: string
     points?: number
-    role?: string
+    role: 'USER' | 'ADMIN'
 }
 
 export interface LoginRequest {
@@ -16,4 +17,14 @@ export interface CreateUserRequest {
     lastName: string
     email: string
     password: string
+}
+
+export interface AuthResponse {
+    token: string;
+    id: number
+    firstName: string
+    lastName: string
+    email: string
+    points?: number
+    role: 'USER' | 'ADMIN'
 }
