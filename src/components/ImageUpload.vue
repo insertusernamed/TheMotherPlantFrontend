@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { usePlantStore } from '@/stores/plantStore'
+import Compressor from 'compressorjs'
 
 const plantStore = usePlantStore()
 const fileInput = ref<HTMLInputElement>()
@@ -21,9 +22,21 @@ const handleFileSelect = (event: Event) => {
     const file = target.files?.[0]
 
     if (file) {
-        selectedFile.value = file
-        previewUrl.value = URL.createObjectURL(file)
-        plantStore.identifyPlant(file)
+        new Compressor(file, {
+            quality: 0.6,
+            maxWidth: 1024,
+            maxHeight: 1024,
+            convertSize: 1000000,
+            success(compressedFile: File) {
+                selectedFile.value = compressedFile
+                previewUrl.value = URL.createObjectURL(compressedFile)
+                plantStore.identifyPlant(compressedFile)
+
+            },
+            error(err) {
+                console.error('Compression failed:', err)
+            },
+        })
     }
 }
 
@@ -35,6 +48,6 @@ defineExpose({
         if (fileInput.value) {
             fileInput.value.value = ''
         }
-    }
+    },
 })
 </script>
