@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import apiClient from '@/utils/apiClient'
+import router from '@/router'
 import type { User, LoginRequest, CreateUserRequest, AuthResponse } from '@/models/User'
 
 export const useAuthStore = defineStore('auth', {
@@ -57,6 +58,7 @@ export const useAuthStore = defineStore('auth', {
             this.user = null
             this.token = null
             localStorage.removeItem('token')
+            router.push('/');
         }
     }
 })
