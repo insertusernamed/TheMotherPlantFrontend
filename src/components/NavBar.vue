@@ -3,8 +3,7 @@
         <router-link to="/">Home</router-link> |
         <router-link to="/shop">Shop</router-link> |
         <template v-if="!authStore.isLoggedIn">
-            <router-link to="/login">Login</router-link> |
-            <router-link to="/register">Register</router-link>
+            <router-link to="/login">Login</router-link>
         </template>
         <template v-else>
             <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'">Admin</router-link>

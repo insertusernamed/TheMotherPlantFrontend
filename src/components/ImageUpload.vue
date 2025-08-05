@@ -9,7 +9,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { usePlantStore } from '@/stores/plantStore'
 
+const plantStore = usePlantStore()
 const fileInput = ref<HTMLInputElement>()
 const selectedFile = ref<File | null>(null)
 const previewUrl = ref<string>('')
@@ -21,6 +23,7 @@ const handleFileSelect = (event: Event) => {
     if (file) {
         selectedFile.value = file
         previewUrl.value = URL.createObjectURL(file)
+        plantStore.identifyPlant(file)
     }
 }
 
