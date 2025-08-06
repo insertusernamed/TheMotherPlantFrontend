@@ -1,77 +1,106 @@
 <template>
-    <div>
-        <p>{{ plantInfo ? '' : 'No plant selected' }}</p>
-        <div v-if="plantInfo && plantInfo.results.length" class="results-container">
-            <h3>Top Match:</h3>
-            <p>
-                <strong>Plant:</strong> {{ plantInfo.results[0].species.commonNames[0] }}<br />
-                <strong>Certainty:</strong> {{ (plantInfo.results[0].score * 100).toFixed(2) }}%
-            </p>
-            <button @click="showOthers = !showOthers">
-                {{ showOthers ? 'Hide Other Results' : 'Show Other Results' }}
-            </button>
-            <div v-if="showOthers" class="other-results">
-                <h3>Other Results:</h3>
-                <ul>
-                    <li v-for="(result, index) in plantInfo.results.slice(1)" :key="index">
-                        <strong>Score:</strong> {{ (result.score * 100).toFixed(2) }}%<br />
-                        <strong>Common Names:</strong> {{ result.species.commonNames.join(', ') }}<br />
-                        <strong>Family:</strong> {{ result.species.family }}
-                    </li>
-                </ul>
-            </div>
+    <div class="plant-info">
+        <PlantIdentification />
+
+        <button @click="plantStore.generateDescriptionsAndPrice"
+            :disabled="!plantStore.selectedPlantInfo.commonName || plantStore.isGenerating"
+            class="btn btn-primary generate-btn">
+            <span v-if="plantStore.isGenerating" class="loading-spinner"></span>
+            {{ plantStore.isGenerating ? 'Generating...' : 'Generate Descriptions and Price' }}
+        </button>
+
+        <div v-if="plantStore.generatedDescriptionsAndPrice" class="generated-content">
+            <DescriptionSelector v-if="plantStore.generatedDescriptionsAndPrice" />
+            <PriceSelector v-if="plantStore.generatedDescriptionsAndPrice" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
+import PlantIdentification from './PlantIdentification.vue';
+import DescriptionSelector from './DescriptionSelector.vue';
+import PriceSelector from './PriceSelector.vue';
 
 const plantStore = usePlantStore();
-const plantInfo = computed(() => plantStore.selectedPlant);
-
-const showOthers = ref(false);
 </script>
 
 <style scoped>
-.results-container {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fdfdfd;
+.plant-info {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
 }
 
-.results-container h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+.generate-btn {
+    margin: 2rem 0;
 }
 
-.results-container p {
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+.generated-content {
+    margin-top: 2rem;
 }
 
-button {
-    margin-top: 0.5rem;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.9rem;
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
     cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 0.5rem;
 }
 
-.other-results {
-    margin-top: 0.5rem;
+.btn-primary {
+    background: #3b82f6;
+    color: white;
 }
 
-.other-results ul {
-    list-style-type: none;
-    padding: 0;
+.btn-primary:hover {
+    background: #2563eb;
 }
 
-.other-results li {
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+.btn-primary:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>

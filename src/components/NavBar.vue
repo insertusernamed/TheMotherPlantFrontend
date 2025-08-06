@@ -18,3 +18,36 @@ import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
 </script>
+
+<style scoped>
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+nav button {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: inherit;
+    text-decoration: underline;
+}
+
+nav button:hover {
+    color: #666;
+}
+</style>

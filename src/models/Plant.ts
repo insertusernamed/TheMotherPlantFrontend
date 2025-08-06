@@ -18,3 +18,22 @@ export interface PlantResponse {
         }
     }[]
 }
+
+export interface GeneratedResponse {
+    descriptions: string[]
+    priceSuggestions: Record<string, number>
+}
+
+export interface OutboundPlant {
+    commonName?: string
+    image?: File
+    description?: string
+    price?: number
+    tags?: string[]
+}
+
+export interface PlantUploadList {
+    plants: {
+        plant: OutboundPlant
+    }[]
+}

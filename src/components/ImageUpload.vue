@@ -2,20 +2,20 @@
     <div>
         <input type="file" accept="image/*" @change="handleFileSelect" ref="fileInput" />
         <div v-if="previewUrl">
-            <img :src="previewUrl" alt="Preview" />
+            <img class="preview-image" :src="previewUrl" alt="Preview" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { usePlantStore } from '@/stores/plantStore'
 import Compressor from 'compressorjs'
 
 const plantStore = usePlantStore()
 const fileInput = ref<HTMLInputElement>()
 const selectedFile = ref<File | null>(null)
-const previewUrl = ref<string>('')
+const previewUrl = computed(() => plantStore.selectedPlantPreview || '')
 
 const handleFileSelect = (event: Event) => {
     const target = event.target as HTMLInputElement
@@ -29,9 +29,9 @@ const handleFileSelect = (event: Event) => {
             convertSize: 1000000,
             success(compressedFile: File) {
                 selectedFile.value = compressedFile
-                previewUrl.value = URL.createObjectURL(compressedFile)
-                plantStore.identifyPlant(compressedFile)
-
+                plantStore.selectedPlantPreview = URL.createObjectURL(compressedFile)
+                plantStore.selectedPlantInfo.image = compressedFile
+                console.log('Selected plant info:', plantStore.selectedPlantInfo)
             },
             error(err) {
                 console.error('Compression failed:', err)
@@ -44,10 +44,24 @@ defineExpose({
     selectedFile,
     clearSelection: () => {
         selectedFile.value = null
-        previewUrl.value = ''
+        plantStore.selectedPlantPreview = ''
         if (fileInput.value) {
             fileInput.value.value = ''
         }
     },
 })
 </script>
+
+<style scoped>
+.preview-image {
+    max-width: 90%;
+    max-height: 50vh;
+    height: auto;
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
