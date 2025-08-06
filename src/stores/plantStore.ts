@@ -24,8 +24,9 @@ export const usePlantStore = defineStore('plant', {
     },
 
     actions: {
-        setPlants(plants: Plant[]) {
-            this.plants = plants
+        async fetchPlants() {
+            const { data } = await apiClient.get<Plant[]>(import.meta.env.VITE_API_PLANT_LIST)
+            this.plants = data
         },
 
         async identifyPlant() {

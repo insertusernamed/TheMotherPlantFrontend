@@ -28,7 +28,7 @@ const router = createRouter({
             path: '/admin',
             name: 'admin',
             component: () => import('@/views/AdminPage.vue'),
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (_to, _from, next) => {
                 const authStore = useAuthStore()
                 if (authStore.user?.role === 'ADMIN') {
                     next()
