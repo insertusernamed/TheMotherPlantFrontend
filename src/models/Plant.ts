@@ -5,7 +5,7 @@ export interface Plant {
     description: string
     imageUrl: string
     price: number
-    tags: string[]
+    tags: (string | { id: number; name: string })[]
 }
 
 export interface PlantResponse {

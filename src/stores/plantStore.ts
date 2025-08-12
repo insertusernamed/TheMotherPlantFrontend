@@ -17,10 +17,18 @@ export const usePlantStore = defineStore('plant', {
         identifyResults: null as PlantResponse | null, // results from plant identification API
         generatedDescriptionsAndPrice: null as GeneratedResponse | null, // results from description and price generation API
         isIdentifying: false, // loading state for plant identification
-        isGenerating: false // loading state for description and price generation
+        isGenerating: false, // loading state for description and price generation
     }),
 
     getters: {
+        isSelectedPlantComplete(): boolean {
+            return !!(
+                this.selectedPlantInfo.commonName &&
+                this.selectedPlantInfo.image &&
+                this.selectedPlantInfo.description &&
+                this.selectedPlantInfo.price
+            )
+        }
     },
 
     actions: {
@@ -83,6 +91,44 @@ export const usePlantStore = defineStore('plant', {
         addPlantToNewPlants() {
             this.newPlants.push({ ...this.selectedPlantInfo })
             this.clearSelectedPlantInfo()
+        },
+
+        async uploadPlants() {
+            const formData = new FormData();
+
+            const plantsWithFiles = this.newPlants.filter(p => {
+                return p.image instanceof File ||
+                    (p.image instanceof Blob) ||
+                    (p.image && 'size' in p.image && 'type' in p.image && 'name' in p.image);
+            });
+
+            if (plantsWithFiles.length === 0) {
+                console.error("No plants with valid files to upload!");
+                return;
+            }
+
+            const plainPlantData = plantsWithFiles.map(p => ({
+                commonName: p.commonName,
+                description: p.description,
+                price: p.price,
+                tags: p.tags,
+            }));
+
+            const fileObjects = plantsWithFiles.map(p => p.image as File);
+
+            formData.append('plantsJson', JSON.stringify(plainPlantData));
+
+            for (const file of fileObjects) {
+                formData.append('files', file);
+            }
+
+            await apiClient.post(import.meta.env.VITE_API_UPLOAD_PLANTS, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+
+            this.newPlants = [];
         },
 
         clearSelectedPlantInfo() {
