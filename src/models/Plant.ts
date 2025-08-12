@@ -22,6 +22,7 @@ export interface PlantResponse {
 export interface GeneratedResponse {
     descriptions: string[]
     priceSuggestions: Record<string, number>
+    tags: string[]
 }
 
 export interface OutboundPlant {

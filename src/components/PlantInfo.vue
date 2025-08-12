@@ -12,15 +12,17 @@
         <div v-if="plantStore.generatedDescriptionsAndPrice" class="generated-content">
             <DescriptionSelector v-if="plantStore.generatedDescriptionsAndPrice" />
             <PriceSelector v-if="plantStore.generatedDescriptionsAndPrice" />
+            <TagSelector v-if="plantStore.generatedDescriptionsAndPrice" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { usePlantStore } from '@/stores/plantStore';
-import PlantIdentification from './PlantIdentification.vue';
-import DescriptionSelector from './DescriptionSelector.vue';
-import PriceSelector from './PriceSelector.vue';
+import PlantIdentification from '@/components/PlantIdentification.vue';
+import DescriptionSelector from '@/components/DescriptionSelector.vue';
+import PriceSelector from '@/components/PriceSelector.vue';
+import TagSelector from '@/components/TagSelector.vue';
 
 const plantStore = usePlantStore();
 </script>

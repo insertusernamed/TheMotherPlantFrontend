@@ -6,18 +6,18 @@ export const usePlantStore = defineStore('plant', {
     state: () => ({
         plants: [] as Plant[], // plants fetched from our db
         newPlants: [] as OutboundPlant[], // plants to be added
-        selectedPlantInfo: {
+        selectedPlantInfo: { // current plant being added
             commonName: '',
             image: undefined,
             description: '',
             price: undefined,
             tags: []
         } as OutboundPlant,
-        selectedPlantPreview: null as string | null,
-        identifyResults: null as PlantResponse | null,
-        generatedDescriptionsAndPrice: null as GeneratedResponse | null,
-        isIdentifying: false,
-        isGenerating: false
+        selectedPlantPreview: null as string | null, // preview url for the current plant
+        identifyResults: null as PlantResponse | null, // results from plant identification API
+        generatedDescriptionsAndPrice: null as GeneratedResponse | null, // results from description and price generation API
+        isIdentifying: false, // loading state for plant identification
+        isGenerating: false // loading state for description and price generation
     }),
 
     getters: {
@@ -64,7 +64,6 @@ export const usePlantStore = defineStore('plant', {
             this.isGenerating = true;
             try {
                 const formData = new FormData();
-                formData.append('file', this.selectedPlantInfo.image as File);
                 formData.append('commonName', this.selectedPlantInfo.commonName);
 
                 const { data } = await apiClient.post<GeneratedResponse>(import.meta.env.VITE_API_PLANT_DESCRIPTION_PRICE, formData, {
@@ -75,6 +74,7 @@ export const usePlantStore = defineStore('plant', {
 
                 console.log('Generated description and prices', data);
                 this.generatedDescriptionsAndPrice = data;
+                this.selectedPlantInfo.tags = data.tags;
             } finally {
                 this.isGenerating = false;
             }
@@ -96,6 +96,7 @@ export const usePlantStore = defineStore('plant', {
 
             this.selectedPlantPreview = null
             this.identifyResults = null
+            this.generatedDescriptionsAndPrice = null
             this.isIdentifying = false
             this.isGenerating = false
         },
