@@ -1,7 +1,9 @@
 <template>
-    <div id="app">
+    <div id="app" class="h-screen flex flex-col bg-brand-background text-brand-text">
         <NavBar />
-        <router-view />
+        <main class="flex-1 overflow-y-auto">
+            <router-view />
+        </main>
     </div>
 </template>
 
@@ -13,15 +15,8 @@ import NavBar from '@/components/NavBar.vue'
 const authStore = useAuthStore()
 
 onMounted(() => {
-    // Only fetch user if we have a token but no user data
     if (authStore.token && !authStore.user) {
         authStore.fetchUser()
     }
 });
 </script>
-
-<style scoped>
-#app {
-    min-height: 100vh;
-}
-</style>

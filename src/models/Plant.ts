@@ -1,18 +1,23 @@
 export interface Plant {
     id: number
-    scientificName: string
+    genus: string
     commonName: string
     description: string
     imageUrl: string
     price: number
-    tags: (string | { id: number; name: string })[]
+    tags: Tag[]
+}
+
+export interface Tag {
+    id: number;
+    name: string;
 }
 
 export interface PlantResponse {
     results: {
         score: number
         species: {
-            scientificName: string | null
+            genus: string | null
             commonNames: string[]
             family: string
         }

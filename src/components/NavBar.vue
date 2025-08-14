@@ -1,53 +1,106 @@
 <template>
-    <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/shop">Shop</router-link> |
-        <template v-if="!authStore.isLoggedIn">
-            <router-link to="/login">Login</router-link>
-        </template>
-        <template v-else>
-            <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'">Admin</router-link>
-            <span v-if="authStore.user?.role === 'ADMIN'"> | </span>
-            <button @click="authStore.logout">Logout</button>
-        </template>
+    <nav class="bg-brand-background border-b border-brand-tan/50 font-sans text-brand-text shadow-sm">
+        <div class="container mx-auto flex items-center justify-between px-6 py-4">
+
+            <router-link to="/"
+                class="font-serif text-2xl font-bold text-brand-heading hover:text-brand-forest transition-colors">
+                The Mother Plant
+            </router-link>
+
+            <div class="hidden md:flex items-center space-x-5 md:space-x-6">
+                <router-link to="/" class="text-lg hover:text-brand-forest transition-colors">Home</router-link>
+                <router-link to="/shop" class="text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+
+                <div class="border-l border-brand-tan h-6 hidden sm:block"></div>
+
+                <template v-if="!authStore.isLoggedIn">
+                    <router-link to="/login"
+                        class="bg-brand-button text-white font-bold py-2 px-5 rounded-md hover:bg-brand-button-hover transition-all transform hover:scale-105">
+                        Login
+                    </router-link>
+                </template>
+
+                <template v-else>
+                    <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'"
+                        class="text-lg hover:text-brand-forest transition-colors">
+                        Admin
+                    </router-link>
+                    <button @click="authStore.logout"
+                        class="text-lg text-brand-text/80 hover:text-brand-forest transition-colors">
+                        Logout
+                    </button>
+                </template>
+            </div>
+
+            <button @click="toggleMobileMenu" class="md:hidden flex justify-center items-center w-12 h-12 p-2">
+                <div class="relative w-6 h-6">
+                    <span
+                        class="block w-5 h-0.5 bg-brand-text absolute left-1/2 -translate-x-1/2 transition-all duration-300"
+                        :class="{ 'rotate-45 top-1/2 -translate-y-1/2': isMobileMenuOpen, 'top-2 -translate-y-1/2': !isMobileMenuOpen }"></span>
+
+                    <span
+                        class="block w-5 h-0.5 bg-brand-text absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
+                        :class="{ 'opacity-0': isMobileMenuOpen }"></span>
+
+                    <span
+                        class="block w-5 h-0.5 bg-brand-text absolute left-1/2 -translate-x-1/2 transition-all duration-300"
+                        :class="{ '-rotate-45 top-1/2 -translate-y-1/2': isMobileMenuOpen, 'top-4 -translate-y-1/2': !isMobileMenuOpen }"></span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+            :class="{ 'max-h-96 opacity-100': isMobileMenuOpen, 'max-h-0 opacity-0': !isMobileMenuOpen }">
+            <div class="bg-brand-background border-t border-brand-tan/50">
+                <div class="px-6 py-4 space-y-4">
+                    <router-link to="/" @click="closeMobileMenu"
+                        class="block text-lg hover:text-brand-forest transition-colors">Home</router-link>
+                    <router-link to="/shop" @click="closeMobileMenu"
+                        class="block text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+
+                    <div class="border-t border-brand-tan/30 pt-4">
+                        <template v-if="!authStore.isLoggedIn">
+                            <router-link to="/login" @click="closeMobileMenu"
+                                class="block bg-brand-button text-white font-bold py-2 px-5 rounded-md hover:bg-brand-button-hover transition-all text-center">
+                                Login
+                            </router-link>
+                        </template>
+
+                        <template v-else>
+                            <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'" @click="closeMobileMenu"
+                                class="block text-lg hover:text-brand-forest transition-colors mb-4">
+                                Admin
+                            </router-link>
+                            <button @click="handleLogout"
+                                class="block w-full text-left text-lg text-brand-text/80 hover:text-brand-forest transition-colors">
+                                Logout
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
+const isMobileMenuOpen = ref(false)
+
+const toggleMobileMenu = () => {
+    isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+
+const closeMobileMenu = () => {
+    isMobileMenuOpen.value = false
+}
+
+const handleLogout = () => {
+    authStore.logout()
+    closeMobileMenu()
+}
 </script>
-
-<style scoped>
-nav {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ddd;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-nav button {
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    font-size: inherit;
-    text-decoration: underline;
-}
-
-nav button:hover {
-    color: #666;
-}
-</style>

@@ -5,6 +5,7 @@ import apiClient from '@/utils/apiClient'
 export const usePlantStore = defineStore('plant', {
     state: () => ({
         plants: [] as Plant[], // plants fetched from our db
+        latestPlants: [] as Plant[], // latest plants fetched from our db
         newPlants: [] as OutboundPlant[], // plants to be added
         selectedPlantInfo: { // current plant being added
             commonName: '',
@@ -33,8 +34,16 @@ export const usePlantStore = defineStore('plant', {
 
     actions: {
         async fetchPlants() {
+            this.plants = []
             const { data } = await apiClient.get<Plant[]>(import.meta.env.VITE_API_PLANT_LIST)
             this.plants = data
+        },
+
+        async fetchLatestPlants(count: number = 3) {
+            this.latestPlants = []
+            const { data } = await apiClient.get<Plant[]>(`${import.meta.env.VITE_API_GET_LATEST_PLANTS}/${count}`)
+            this.latestPlants = data
+            console.log('Latest plants fetched:', data)
         },
 
         async identifyPlant() {
