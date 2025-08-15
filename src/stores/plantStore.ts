@@ -20,6 +20,7 @@ export const usePlantStore = defineStore('plant', {
         generatedDescriptionsAndPrice: null as GeneratedResponse | null, // results from description and price generation API
         isIdentifying: false, // loading state for plant identification
         isGenerating: false, // loading state for description and price generation
+        isUploading: false, // loading state for plant upload
     }),
 
     getters: {
@@ -114,6 +115,10 @@ export const usePlantStore = defineStore('plant', {
         },
 
         async uploadPlants() {
+            if (this.isUploading) return; // Prevent multiple uploads
+
+            this.isUploading = true;
+
             const formData = new FormData();
 
             const plantsWithFiles = this.newPlants.filter(p => {
@@ -125,6 +130,7 @@ export const usePlantStore = defineStore('plant', {
             if (plantsWithFiles.length === 0) {
                 console.error("No plants with valid files to upload!");
                 showToast("No plants with valid files to upload!", "error");
+                this.isUploading = false;
                 return;
             }
 
@@ -155,6 +161,8 @@ export const usePlantStore = defineStore('plant', {
             } catch (error) {
                 console.error('Failed to upload plants:', error);
                 showToast("Failed to upload plants. Please try again.", "error");
+            } finally {
+                this.isUploading = false;
             }
         },
 
@@ -172,6 +180,7 @@ export const usePlantStore = defineStore('plant', {
             this.generatedDescriptionsAndPrice = null
             this.isIdentifying = false
             this.isGenerating = false
+            this.isUploading = false
         },
 
         setSelectedCommonName(commonName: string | undefined) {
