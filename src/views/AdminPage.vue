@@ -11,14 +11,14 @@
                 <ImageUpload />
                 <PlantInfo />
 
-                <div
+                <div v-if="plantStore.isSelectedPlantComplete || plantStore.newPlants.length > 0"
                     class="mt-8 pt-6 border-t border-brand-tan/50 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button @click="plantStore.addPlantToNewPlants" :disabled="!plantStore.isSelectedPlantComplete"
-                        class="w-full sm:w-auto bg-brand-forest text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1 disabled:bg-brand-sage disabled:cursor-not-allowed disabled:transform-none">
+                    <button v-if="plantStore.isSelectedPlantComplete" @click="plantStore.addPlantToNewPlants"
+                        class="w-full sm:w-auto bg-brand-forest text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1">
                         Save and Add Another Plant
                     </button>
-                    <button @click="plantStore.uploadPlants" :disabled="plantStore.newPlants.length === 0"
-                        class="w-full sm:w-auto bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
+                    <button v-if="plantStore.newPlants.length > 0" @click="plantStore.uploadPlants"
+                        class="w-full sm:w-auto bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1">
                         Upload All Saved Plants ({{ plantStore.newPlants.length }})
                     </button>
                 </div>

@@ -1,11 +1,14 @@
 <template>
     <div class="mb-8">
-        <button v-if="!plantStore.identifyResults" @click="plantStore.identifyPlant"
-            :disabled="!plantStore.selectedPlantInfo.image || plantStore.isIdentifying"
-            class="w-full bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-brand-button-hover transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2">
-            <span v-if="plantStore.isIdentifying"
-                class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-            {{ plantStore.isIdentifying ? 'Identifying...' : 'Identify Plant' }}
+        <button v-if="!plantStore.identifyResults && plantStore.selectedPlantInfo.image && !plantStore.isIdentifying"
+            @click="plantStore.identifyPlant"
+            class="w-full bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-brand-button-hover transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+            Identify Plant
+        </button>
+        <button v-else-if="!plantStore.identifyResults && plantStore.isIdentifying"
+            class="w-full bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md flex items-center justify-center gap-2">
+            <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            Identifying...
         </button>
 
         <div v-if="identifyResults && identifyResults.results.length && !plantStore.selectedPlantInfo.commonName"
