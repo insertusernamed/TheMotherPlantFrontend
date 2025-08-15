@@ -44,13 +44,16 @@ const loading = ref(true);
 
 const filteredPlants = computed(() => {
     const query = searchQuery.value.trim().toLowerCase();
-    if (!query) {
-        return plantStore.plants;
+    let plants = plantStore.plants;
+
+    if (query) {
+        plants = plants.filter(plant =>
+            plant.commonName?.toLowerCase().includes(query) ||
+            plant.genus?.toLowerCase().includes(query)
+        );
     }
-    return plantStore.plants.filter(plant =>
-        plant.commonName?.toLowerCase().includes(query) ||
-        plant.genus?.toLowerCase().includes(query)
-    );
+
+    return plants.sort((a, b) => b.id - a.id);
 });
 
 onMounted(async () => {

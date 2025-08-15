@@ -1,8 +1,28 @@
 <template>
-    <div class="tag-selector">
-        <h3>Tags:</h3>
-        <div class="tags">
-            <span v-for="(tag, index) in tags" :key="index" class="tag">{{ tag }}</span>
+    <div>
+        <h2 class="section-title">Step 4: Review Tags</h2>
+
+        <div
+            class="p-4 bg-white/70 rounded-lg border border-brand-tan/50 min-h-[6rem] flex items-center justify-center">
+
+            <p v-if="!tags || tags.length === 0" class="text-brand-text/70 italic">
+                No tags assigned.
+            </p>
+
+            <div v-else class="flex flex-wrap gap-3 justify-center">
+                <span v-for="tag in tags" :key="tag"
+                    class="bg-brand-sage/50 text-brand-forest font-semibold text-sm px-3 py-1.5 rounded-full inline-flex items-center gap-2">
+                    <span>{{ tag }}</span>
+                    <button @click="removeTag(tag)"
+                        class="bg-brand-sage/80 rounded-full w-5 h-5 flex items-center justify-center hover:bg-brand-forest hover:text-white transition-colors"
+                        title="Remove tag">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -13,35 +33,8 @@ import { usePlantStore } from '@/stores/plantStore';
 
 const plantStore = usePlantStore();
 const tags = computed(() => plantStore.generatedDescriptionsAndPrice?.tags || []);
+
+const removeTag = (tagToRemove: string) => {
+    plantStore.removeTag(tagToRemove);
+};
 </script>
-
-<style scoped>
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.tag {
-    background-color: #e5e7eb;
-    color: #374151;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-.tag-suggestions {
-    margin-top: 16px;
-}
-
-.tag-suggestions h4 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-}
-
-.tag.suggestion {
-    background-color: #ddd6fe;
-    color: #5b21b6;
-    border: 1px dashed #8b5cf6;
-}
-</style>

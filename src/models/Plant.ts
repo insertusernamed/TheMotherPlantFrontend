@@ -32,6 +32,7 @@ export interface GeneratedResponse {
 
 export interface OutboundPlant {
     commonName?: string
+    genus?: string
     image?: File
     description?: string
     price?: number

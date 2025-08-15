@@ -8,7 +8,6 @@
             </router-link>
 
             <div class="hidden md:flex items-center space-x-5 md:space-x-6">
-                <router-link to="/" class="text-lg hover:text-brand-forest transition-colors">Home</router-link>
                 <router-link to="/shop" class="text-lg hover:text-brand-forest transition-colors">Shop</router-link>
 
                 <div class="border-l border-brand-tan h-6 hidden sm:block"></div>
@@ -54,8 +53,6 @@
             :class="{ 'max-h-96 opacity-100': isMobileMenuOpen, 'max-h-0 opacity-0': !isMobileMenuOpen }">
             <div class="bg-brand-background border-t border-brand-tan/50">
                 <div class="px-6 py-4 space-y-4">
-                    <router-link to="/" @click="closeMobileMenu"
-                        class="block text-lg hover:text-brand-forest transition-colors">Home</router-link>
                     <router-link to="/shop" @click="closeMobileMenu"
                         class="block text-lg hover:text-brand-forest transition-colors">Shop</router-link>
 

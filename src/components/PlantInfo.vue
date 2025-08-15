@@ -1,18 +1,28 @@
 <template>
-    <div class="plant-info">
+    <div class="mt-6">
         <PlantIdentification />
 
-        <button @click="plantStore.generateDescriptionsAndPrice"
-            :disabled="!plantStore.selectedPlantInfo.commonName || plantStore.isGenerating"
-            class="btn btn-primary generate-btn">
-            <span v-if="plantStore.isGenerating" class="loading-spinner"></span>
-            {{ plantStore.isGenerating ? 'Generating...' : 'Generate Descriptions and Price' }}
-        </button>
+        <div class="text-center my-6">
+            <button @click="plantStore.generateDescriptionsAndPrice"
+                :disabled="!plantStore.selectedPlantInfo.commonName || plantStore.isGenerating"
+                class="bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md inline-flex items-center justify-center transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
+                <svg v-if="plantStore.isGenerating" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
+                <span>
+                    {{ plantStore.isGenerating ? 'Generating Details...' : 'Generate Descriptions & Price' }}
+                </span>
+            </button>
+        </div>
 
-        <div v-if="plantStore.generatedDescriptionsAndPrice" class="generated-content">
-            <DescriptionSelector v-if="plantStore.generatedDescriptionsAndPrice" />
-            <PriceSelector v-if="plantStore.generatedDescriptionsAndPrice" />
-            <TagSelector v-if="plantStore.generatedDescriptionsAndPrice" />
+        <div v-if="plantStore.generatedDescriptionsAndPrice" class="mt-6 pt-6 border-t border-brand-tan/50 space-y-8">
+            <DescriptionSelector />
+            <PriceSelector />
+            <TagSelector />
         </div>
     </div>
 </template>
@@ -26,83 +36,3 @@ import TagSelector from '@/components/TagSelector.vue';
 
 const plantStore = usePlantStore();
 </script>
-
-<style scoped>
-.plant-info {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1.5rem;
-}
-
-.generate-btn {
-    margin: 2rem 0;
-}
-
-.generated-content {
-    margin-top: 2rem;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    gap: 0.5rem;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #2563eb;
-}
-
-.btn-primary:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-.btn-secondary {
-    background: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-}
-
-.btn-secondary:hover {
-    background: #e5e7eb;
-}
-
-h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.loading-spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-</style>

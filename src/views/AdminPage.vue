@@ -1,22 +1,30 @@
 <template>
-    <div class="admin-page">
-        <h1 class="admin-title">Admin Page</h1>
+    <div class="bg-brand-background min-h-full font-sans text-brand-text p-4 sm:p-6 md:p-8">
+        <main class="container mx-auto">
 
-        <div class="admin-content">
-            <ImageUpload />
-            <PlantInfo />
+            <section class="text-center mb-8">
+                <h1 class="font-serif text-5xl font-bold text-brand-heading">Admin Panel</h1>
+                <p class="mt-2 text-xl text-brand-forest">Add a new plant to the collection</p>
+            </section>
 
-            <div class="action-buttons">
-                <button @click="plantStore.addPlantToNewPlants" :disabled="!plantStore.isSelectedPlantComplete"
-                    class="btn btn-primary">
-                    Finish Plant
-                </button>
-                <button @click="plantStore.uploadPlants" :disabled="plantStore.newPlants.length === 0"
-                    class="btn btn-secondary">
-                    Upload All Plants
-                </button>
+            <div class="max-w-4xl mx-auto bg-white/50 rounded-xl shadow-2xl p-6 sm:p-8">
+                <ImageUpload />
+                <PlantInfo />
+
+                <div
+                    class="mt-8 pt-6 border-t border-brand-tan/50 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button @click="plantStore.addPlantToNewPlants" :disabled="!plantStore.isSelectedPlantComplete"
+                        class="w-full sm:w-auto bg-brand-forest text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1 disabled:bg-brand-sage disabled:cursor-not-allowed disabled:transform-none">
+                        Save and Add Another Plant
+                    </button>
+                    <button @click="plantStore.uploadPlants" :disabled="plantStore.newPlants.length === 0"
+                        class="w-full sm:w-auto bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
+                        Upload All Saved Plants ({{ plantStore.newPlants.length }})
+                    </button>
+                </div>
             </div>
-        </div>
+
+        </main>
     </div>
 </template>
 
@@ -27,66 +35,3 @@ import { usePlantStore } from '@/stores/plantStore';
 
 const plantStore = usePlantStore();
 </script>
-
-<style scoped>
-.admin-page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.admin-title {
-    font-size: 2rem;
-    font-weight: 300;
-    color: #333;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.admin-content {
-    background: #fff;
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-    justify-content: center;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-primary {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background-color: #45a049;
-}
-
-.btn-secondary {
-    background-color: #2196F3;
-    color: white;
-}
-
-.btn-secondary:hover:not(:disabled) {
-    background-color: #1976D2;
-}
-</style>

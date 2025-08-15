@@ -1,57 +1,68 @@
 <template>
-    <div class="price-selector">
+    <div class="mb-8">
         <div v-if="!plantStore.selectedPlantInfo.price && plantStore.generatedDescriptionsAndPrice?.priceSuggestions"
             class="selection">
-            <h3>Choose a price:</h3>
-            <div class="options">
-                <div class="option price-option"
+            <h3 class="font-serif text-2xl font-bold text-brand-heading mb-6">Choose a price:</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div class="bg-white/70 p-4 border border-brand-tan/50 rounded-lg cursor-pointer transition-all hover:bg-brand-tan/20 hover:border-brand-forest/50 hover:shadow-md text-center"
                     @click="selectPrice(plantStore.generatedDescriptionsAndPrice!.priceSuggestions.low)">
-                    <div class="price-content">
-                        <span class="price">${{ plantStore.generatedDescriptionsAndPrice.priceSuggestions.low }}</span>
-                        <span class="tier">Budget-friendly</span>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xl font-bold text-brand-heading">${{
+                            plantStore.generatedDescriptionsAndPrice.priceSuggestions.low }}</span>
+                        <span class="text-sm text-brand-forest">Budget-friendly</span>
                     </div>
                 </div>
-                <div class="option price-option"
+                <div class="bg-white/70 p-4 border border-brand-tan/50 rounded-lg cursor-pointer transition-all hover:bg-brand-tan/20 hover:border-brand-forest/50 hover:shadow-md text-center"
                     @click="selectPrice(plantStore.generatedDescriptionsAndPrice!.priceSuggestions.mid)">
-                    <div class="price-content">
-                        <span class="price">${{ plantStore.generatedDescriptionsAndPrice.priceSuggestions.mid }}</span>
-                        <span class="tier">Standard</span>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xl font-bold text-brand-heading">${{
+                            plantStore.generatedDescriptionsAndPrice.priceSuggestions.mid }}</span>
+                        <span class="text-sm text-brand-forest">Standard</span>
                     </div>
                 </div>
-                <div class="option price-option"
+                <div class="bg-white/70 p-4 border border-brand-tan/50 rounded-lg cursor-pointer transition-all hover:bg-brand-tan/20 hover:border-brand-forest/50 hover:shadow-md text-center"
                     @click="selectPrice(plantStore.generatedDescriptionsAndPrice!.priceSuggestions.high)">
-                    <div class="price-content">
-                        <span class="price">${{ plantStore.generatedDescriptionsAndPrice.priceSuggestions.high }}</span>
-                        <span class="tier">Premium</span>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xl font-bold text-brand-heading">${{
+                            plantStore.generatedDescriptionsAndPrice.priceSuggestions.high }}</span>
+                        <span class="text-sm text-brand-forest">Premium</span>
                     </div>
                 </div>
-                <div class="option price-option custom-option" @click="toggleManualInput">
-                    <div class="price-content">
-                        <span class="price">Custom</span>
-                        <span class="tier">Set your own</span>
+                <div class="bg-white/70 p-4 border-2 border-dashed border-brand-sage rounded-lg cursor-pointer transition-all hover:bg-brand-tan/20 hover:border-brand-forest text-center"
+                    @click="toggleManualInput">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xl font-bold text-brand-heading">Custom</span>
+                        <span class="text-sm text-brand-forest">Set your own</span>
                     </div>
                 </div>
             </div>
 
-            <div v-if="showManualInput" class="manual-input">
-                <label for="manual-price">Enter custom price:</label>
-                <div class="input-group">
-                    <span class="currency">$</span>
+            <div v-if="showManualInput" class="mt-4 p-4 bg-white/80 rounded-lg border border-brand-sage">
+                <label for="manual-price" class="block mb-2 font-semibold text-brand-heading">Enter custom
+                    price:</label>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-semibold text-brand-heading">$</span>
                     <input id="manual-price" v-model="manualPrice" type="number" step="0.01" min="0" placeholder="0.00"
-                        @keyup.enter="submitManualPrice" />
-                    <button @click="submitManualPrice" class="btn btn-primary" :disabled="!isValidPrice">
+                        @keyup.enter="submitManualPrice"
+                        class="flex-1 px-3 py-2 border border-brand-tan rounded-lg focus:outline-none focus:border-brand-forest focus:ring-2 focus:ring-brand-forest/20" />
+                    <button @click="submitManualPrice" :disabled="!isValidPrice"
+                        class="bg-brand-sage text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-brand-forest transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
                         Set Price
                     </button>
                 </div>
             </div>
         </div>
 
-        <div v-if="plantStore.selectedPlantInfo.price" class="selected">
-            <div class="selected-info">
-                <span class="label">Price:</span>
-                <span class="value">${{ plantStore.selectedPlantInfo.price }}</span>
+        <div v-if="plantStore.selectedPlantInfo.price"
+            class="p-6 bg-brand-tan/30 rounded-lg border border-brand-tan/70">
+            <div class="mb-4">
+                <span class="font-semibold text-brand-heading">Price:</span>
+                <span class="text-xl font-bold text-brand-text ml-2">${{ plantStore.selectedPlantInfo.price }}</span>
             </div>
-            <button @click="resetPrice" class="btn btn-secondary">Choose Different Price</button>
+            <button @click="resetPrice"
+                class="bg-brand-sage text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-brand-forest transition-all transform hover:-translate-y-1">
+                Choose Different Price
+            </button>
         </div>
     </div>
 </template>
@@ -99,154 +110,3 @@ const resetPrice = () => {
     resetManualInput();
 };
 </script>
-
-<style scoped>
-.price-selector {
-    margin-bottom: 2rem;
-}
-
-.options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.75rem;
-    margin-top: 1rem;
-}
-
-.price-option {
-    padding: 1rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: #ffffff;
-    text-align: center;
-}
-
-.price-option:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.price-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.price {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.tier {
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-.selected {
-    padding: 1rem;
-    background: #f9fafb;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-}
-
-.selected-info {
-    margin-bottom: 0.75rem;
-}
-
-.label {
-    font-weight: 500;
-    color: #374151;
-    margin-right: 0.5rem;
-}
-
-.value {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.custom-option {
-    border: 2px dashed #d1d5db;
-    background: #fafafa;
-}
-
-.custom-option:hover {
-    border-color: #3b82f6;
-    background: #ffffff;
-}
-
-.manual-input {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f9fafb;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-}
-
-.manual-input label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.input-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.currency {
-    font-size: 1.125rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.input-group input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.btn-primary:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-.btn-secondary {
-    background: #6b7280;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #4b5563;
-}
-</style>

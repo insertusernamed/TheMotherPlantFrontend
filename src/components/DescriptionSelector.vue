@@ -1,38 +1,43 @@
 <template>
-    <div class="description-selector">
-        <div v-if="!plantStore.selectedPlantInfo.description && plantStore.generatedDescriptionsAndPrice?.descriptions"
-            class="selection">
-            <h3>Choose a description:</h3>
-            <div class="options">
-                <div v-for="(desc, index) in plantStore.generatedDescriptionsAndPrice.descriptions" :key="index"
-                    class="option description-option" @click="selectDescription(desc)">
-                    {{ desc }}
-                </div>
-
-                <div class="option description-option custom-option" @click="toggleManualInput">
-                    Write your own description
-                </div>
-            </div>
-
-            <div v-if="showManualInput" class="manual-input">
-                <label for="manual-description">Enter custom description:</label>
-                <div class="input-group">
-                    <textarea id="manual-description" v-model="manualDescription"
-                        placeholder="Write a custom description for your plant..." rows="4"
-                        @keyup.ctrl.enter="submitManualDescription"></textarea>
-                    <button @click="submitManualDescription" class="btn btn-primary" :disabled="!isValidDescription">
-                        Set Description
-                    </button>
-                </div>
-            </div>
+    <div>
+        <div v-if="plantStore.selectedPlantInfo.description"
+            class="p-4 bg-brand-sage/20 rounded-lg border border-brand-sage flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p class="text-brand-text flex-1">{{ plantStore.selectedPlantInfo.description }}</p>
+            <button @click="resetDescription"
+                class="bg-brand-brown/80 text-white font-semibold py-2 px-4 rounded-md hover:bg-brand-brown transition-colors flex-shrink-0">
+                Change
+            </button>
         </div>
 
-        <div v-if="plantStore.selectedPlantInfo.description" class="selected">
-            <div class="selected-info">
-                <span class="label">Description:</span>
-                <p class="description-text">{{ plantStore.selectedPlantInfo.description }}</p>
+        <div v-else class="space-y-4">
+            <div v-for="(desc, index) in plantStore.generatedDescriptionsAndPrice?.descriptions" :key="index"
+                @click="selectDescription(desc)"
+                class="p-4 bg-white/70 rounded-lg border border-brand-tan/50 cursor-pointer hover:border-brand-sage hover:bg-white transition-all">
+                {{ desc }}
             </div>
-            <button @click="resetDescription" class="btn btn-secondary">Choose Different Description</button>
+
+            <div class="bg-white/70 rounded-lg border border-brand-tan/50 overflow-hidden">
+                <div @click="toggleManualInput"
+                    class="p-4 cursor-pointer hover:bg-brand-tan/20 transition-all flex items-center justify-between">
+                    <span class="text-brand-heading font-medium">Write your own description</span>
+                    <span class="text-brand-forest text-sm">{{ showManualInput ? 'Click to collapse' : 'Click to expand'
+                        }}</span>
+                </div>
+
+                <div v-if="showManualInput" class="border-t border-brand-tan/50 p-4 bg-white/50">
+                    <textarea v-model="manualDescription" placeholder="Write a custom description for your plant..."
+                        rows="4"
+                        class="w-full px-3 py-2 border border-brand-tan rounded-lg focus:outline-none focus:border-brand-forest focus:ring-2 focus:ring-brand-forest/20 resize-none"></textarea>
+                    <div class="mt-3 flex items-center justify-end gap-3">
+                        <button @click="toggleManualInput"
+                            class="px-4 py-2 text-brand-text hover:text-brand-heading transition-colors">Cancel</button>
+                        <button @click="submitManualDescription" :disabled="!isValidDescription"
+                            class="bg-brand-sage text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-brand-forest transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
+                            Set Description
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -74,144 +79,8 @@ const resetManualInput = () => {
 };
 
 const resetDescription = () => {
+    manualDescription.value = plantStore.selectedPlantInfo.description || '';
+    showManualInput.value = true;
     plantStore.setSelectedDescription('');
-    resetManualInput();
 };
 </script>
-
-<style scoped>
-.description-selector {
-    margin-bottom: 2rem;
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1rem;
-}
-
-.description-option {
-    padding: 1rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: #ffffff;
-    line-height: 1.5;
-    color: #374151;
-}
-
-.description-option:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.custom-option {
-    border: 2px dashed #d1d5db;
-    background: #fafafa;
-    text-align: center;
-    font-style: italic;
-    color: #6b7280;
-}
-
-.custom-option:hover {
-    border-color: #3b82f6;
-    background: #ffffff;
-    color: #374151;
-}
-
-.selected {
-    padding: 1rem;
-    background: #f9fafb;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-}
-
-.selected-info {
-    margin-bottom: 0.75rem;
-}
-
-.label {
-    font-weight: 500;
-    color: #374151;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-.description-text {
-    margin: 0;
-    line-height: 1.5;
-    color: #1f2937;
-}
-
-.manual-input {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f9fafb;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-}
-
-.manual-input label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.input-group textarea {
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-family: inherit;
-    resize: vertical;
-    min-height: 100px;
-}
-
-.input-group textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    align-self: flex-start;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.btn-primary:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-}
-
-.btn-secondary {
-    background: #6b7280;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #4b5563;
-}
-</style>

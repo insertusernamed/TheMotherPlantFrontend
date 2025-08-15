@@ -2,7 +2,9 @@
     <div id="app" class="h-screen flex flex-col bg-brand-background text-brand-text">
         <NavBar />
         <main class="flex-1 overflow-y-auto">
-            <router-view />
+            <Transition name="fade" mode="out-in">
+                <router-view />
+            </Transition>
         </main>
     </div>
 </template>
@@ -20,3 +22,15 @@ onMounted(() => {
     }
 });
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

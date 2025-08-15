@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { PlantResponse, Plant, OutboundPlant, GeneratedResponse } from '@/models/Plant'
 import apiClient from '@/utils/apiClient'
+import { showToast } from '@/utils/BaseToast'
 
 export const usePlantStore = defineStore('plant', {
     state: () => ({
@@ -97,6 +98,16 @@ export const usePlantStore = defineStore('plant', {
             }
         },
 
+        removeTag(tagToRemove: string) {
+            if (this.generatedDescriptionsAndPrice?.tags) {
+                const index = this.generatedDescriptionsAndPrice.tags.indexOf(tagToRemove);
+
+                if (index > -1) {
+                    this.generatedDescriptionsAndPrice.tags.splice(index, 1);
+                }
+            }
+        },
+
         addPlantToNewPlants() {
             this.newPlants.push({ ...this.selectedPlantInfo })
             this.clearSelectedPlantInfo()
@@ -113,6 +124,7 @@ export const usePlantStore = defineStore('plant', {
 
             if (plantsWithFiles.length === 0) {
                 console.error("No plants with valid files to upload!");
+                showToast("No plants with valid files to upload!", "error");
                 return;
             }
 
@@ -131,13 +143,19 @@ export const usePlantStore = defineStore('plant', {
                 formData.append('files', file);
             }
 
-            await apiClient.post(import.meta.env.VITE_API_UPLOAD_PLANTS, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            });
+            try {
+                await apiClient.post(import.meta.env.VITE_API_UPLOAD_PLANTS, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                });
 
-            this.newPlants = [];
+                this.newPlants = [];
+                showToast(`Successfully uploaded ${plantsWithFiles.length} plant(s)!`, "success");
+            } catch (error) {
+                console.error('Failed to upload plants:', error);
+                showToast("Failed to upload plants. Please try again.", "error");
+            }
         },
 
         clearSelectedPlantInfo() {
