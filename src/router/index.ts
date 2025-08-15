@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import HomePage from '@/views/HomePage.vue'
+import LoginPage from '@/views/LoginPage.vue'
+import RegisterPage from '@/views/RegisterPage.vue'
+import ShopPage from '@/views/ShopPage.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -7,22 +11,22 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: () => import('@/views/HomePage.vue')
+            component: HomePage
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('@/views/LoginPage.vue')
+            component: LoginPage
         },
         {
             path: '/register',
             name: 'register',
-            component: () => import('@/views/RegisterPage.vue')
+            component: RegisterPage
         },
         {
             path: '/shop',
             name: 'shop',
-            component: () => import('@/views/ShopPage.vue')
+            component: ShopPage
         },
         {
             path: '/admin',
