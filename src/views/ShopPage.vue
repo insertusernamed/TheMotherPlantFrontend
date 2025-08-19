@@ -39,11 +39,13 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, nextTick } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
+import { useTagStore } from '@/stores/tagStore';
 import PlantCard from '@/components/PlantCard.vue';
 import PlantModal from '@/components/PlantModal.vue';
 import type { Plant } from '@/models/Plant';
 
 const plantStore = usePlantStore();
+const tagStore = useTagStore();
 const searchQuery = ref('');
 const loading = ref(true);
 const selectedPlant = ref<Plant | null>(null);
@@ -66,6 +68,7 @@ const filteredPlants = computed(() => {
 onMounted(async () => {
     loading.value = true;
     await plantStore.fetchPlants();
+    await tagStore.fetchTags();
     loading.value = false;
 });
 

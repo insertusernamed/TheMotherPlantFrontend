@@ -9,6 +9,16 @@
 
             <div class="hidden md:flex items-center space-x-5 md:space-x-6">
                 <router-link to="/shop" class="text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+
+                <div v-if="authStore.isLoggedIn" class="flex items-center space-x-4">
+                    <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'"
+                        class="text-lg hover:text-brand-forest transition-colors">
+                        Admin
+                    </router-link>
+                    <button @click="authStore.logout" class="text-lg hover:text-brand-forest transition-colors">
+                        Logout
+                    </button>
+                </div>
             </div>
 
             <button @click="toggleMobileMenu" class="md:hidden flex justify-center items-center w-12 h-12 p-2">
@@ -28,13 +38,23 @@
             </button>
         </div>
 
-        <!-- Mobile Menu Overlay -->
         <div class="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
             :class="{ 'max-h-96 opacity-100': isMobileMenuOpen, 'max-h-0 opacity-0': !isMobileMenuOpen }">
             <div class="bg-brand-background border-t border-brand-tan/50">
                 <div class="px-6 py-4 space-y-4">
                     <router-link to="/shop" @click="closeMobileMenu"
                         class="block text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+
+                    <div v-if="authStore.isLoggedIn" class="space-y-4 pt-2 border-t border-brand-tan/30">
+                        <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'" @click="closeMobileMenu"
+                            class="block text-lg hover:text-brand-forest transition-colors">
+                            Admin
+                        </router-link>
+                        <button @click="authStore.logout; closeMobileMenu"
+                            class="block text-lg hover:text-brand-forest transition-colors text-left">
+                            Logout
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,6 +63,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
 
 const isMobileMenuOpen = ref(false)
 

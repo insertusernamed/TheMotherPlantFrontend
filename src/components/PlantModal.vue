@@ -7,8 +7,9 @@
                 <div
                     class="relative bg-brand-background rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
                     <button @click="$emit('close')"
-                        class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center transition-colors">
-                        <svg class="w-6 h-6 text-brand-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 hover:bg-white hover:shadow-lg rounded-full flex items-center justify-center transition-all duration-200 group">
+                        <svg class="w-6 h-6 text-brand-text group-hover:text-red-500 transition-colors duration-200"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
