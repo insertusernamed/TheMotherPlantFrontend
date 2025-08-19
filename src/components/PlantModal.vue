@@ -42,11 +42,13 @@
 
                             <div v-if="plant.tags && plant.tags.length > 0" class="mb-6">
                                 <h3 class="font-semibold text-brand-heading mb-2">Tags</h3>
+                                <p class="text-sm text-brand-text/70 mb-3">Click a tag to filter by it</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <span v-for="tag in plant.tags" :key="tag.id"
-                                        class="px-3 py-1 bg-brand-sage/20 text-brand-forest rounded-full text-sm">
+                                    <button v-for="tag in plant.tags" :key="tag.id"
+                                        @click="$emit('add-tag-filter', tag.id)"
+                                        class="px-3 py-1 bg-brand-sage/20 hover:bg-brand-sage/40 text-brand-forest rounded-full text-sm transition-colors duration-200 cursor-pointer hover:shadow-sm">
                                         {{ tag.name }}
-                                    </span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -67,6 +69,7 @@ defineProps<{
 
 defineEmits<{
     close: [];
+    'add-tag-filter': [tagId: number];
 }>();
 </script>
 
