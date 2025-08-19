@@ -4,8 +4,12 @@
         <div class="w-full max-w-md bg-white/50 rounded-xl shadow-2xl p-8">
 
             <div class="text-center mb-8">
-                <h1 class="font-serif text-4xl font-bold text-brand-heading">Welcome Back</h1>
-                <p class="text-brand-text/90 mt-2">Please sign in to your account.</p>
+                <h1 class="font-serif text-4xl font-bold text-brand-heading">Admin Access</h1>
+                <p class="text-brand-text/90 mt-2">Administrator login only.</p>
+                <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-3 rounded-md mt-4 text-sm">
+                    <p>This login is for authorized administrators only. Regular customers do not need an account to
+                        browse or purchase plants.</p>
+                </div>
             </div>
 
             <form @submit.prevent="handleLogin" class="space-y-6">
@@ -32,11 +36,6 @@
             </form>
 
             <div class="text-center mt-6 text-brand-text/90">
-                <p>
-                    Don't have an account?
-                    <router-link to="/register" class="font-semibold text-brand-forest hover:underline">Register
-                        here</router-link>
-                </p>
                 <p class="mt-2">
                     <router-link to="/" class="text-sm hover:underline">Back to Home</router-link>
                 </p>

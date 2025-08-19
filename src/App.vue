@@ -1,11 +1,12 @@
 <template>
-    <div id="app" class="h-screen flex flex-col bg-brand-background text-brand-text">
+    <div id="app" class="min-h-screen flex flex-col bg-brand-background text-brand-text">
         <NavBar />
-        <main class="flex-1 overflow-y-auto">
+        <main class="flex-1">
             <Transition name="fade" mode="out-in">
                 <router-view />
             </Transition>
         </main>
+        <AppFooter />
     </div>
 </template>
 
@@ -13,6 +14,7 @@
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import NavBar from '@/components/NavBar.vue'
+import AppFooter from '@/components/AppFooter.vue'
 
 const authStore = useAuthStore()
 

@@ -9,26 +9,6 @@
 
             <div class="hidden md:flex items-center space-x-5 md:space-x-6">
                 <router-link to="/shop" class="text-lg hover:text-brand-forest transition-colors">Shop</router-link>
-
-                <div class="border-l border-brand-tan h-6 hidden sm:block"></div>
-
-                <template v-if="!authStore.isLoggedIn">
-                    <router-link to="/login"
-                        class="bg-brand-button text-white font-bold py-2 px-5 rounded-md hover:bg-brand-button-hover transition-all transform hover:scale-105">
-                        Login
-                    </router-link>
-                </template>
-
-                <template v-else>
-                    <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'"
-                        class="text-lg hover:text-brand-forest transition-colors">
-                        Admin
-                    </router-link>
-                    <button @click="authStore.logout"
-                        class="text-lg text-brand-text/80 hover:text-brand-forest transition-colors">
-                        Logout
-                    </button>
-                </template>
             </div>
 
             <button @click="toggleMobileMenu" class="md:hidden flex justify-center items-center w-12 h-12 p-2">
@@ -55,26 +35,6 @@
                 <div class="px-6 py-4 space-y-4">
                     <router-link to="/shop" @click="closeMobileMenu"
                         class="block text-lg hover:text-brand-forest transition-colors">Shop</router-link>
-
-                    <div class="border-t border-brand-tan/30 pt-4">
-                        <template v-if="!authStore.isLoggedIn">
-                            <router-link to="/login" @click="closeMobileMenu"
-                                class="block bg-brand-button text-white font-bold py-2 px-5 rounded-md hover:bg-brand-button-hover transition-all text-center">
-                                Login
-                            </router-link>
-                        </template>
-
-                        <template v-else>
-                            <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'" @click="closeMobileMenu"
-                                class="block text-lg hover:text-brand-forest transition-colors mb-4">
-                                Admin
-                            </router-link>
-                            <button @click="handleLogout"
-                                class="block w-full text-left text-lg text-brand-text/80 hover:text-brand-forest transition-colors">
-                                Logout
-                            </button>
-                        </template>
-                    </div>
                 </div>
             </div>
         </div>
@@ -83,9 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/authStore'
 
-const authStore = useAuthStore()
 const isMobileMenuOpen = ref(false)
 
 const toggleMobileMenu = () => {
@@ -94,10 +52,5 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
     isMobileMenuOpen.value = false
-}
-
-const handleLogout = () => {
-    authStore.logout()
-    closeMobileMenu()
 }
 </script>

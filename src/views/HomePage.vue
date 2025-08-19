@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-brand-background height-full font-sans text-brand-text">
+    <div class="bg-brand-background font-sans text-brand-text">
         <main class="container mx-auto px-6 py-16 md:py-24">
 
             <section class="grid md:grid-cols-2 gap-12 items-center">
