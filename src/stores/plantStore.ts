@@ -114,6 +114,12 @@ export const usePlantStore = defineStore('plant', {
             this.clearSelectedPlantInfo()
         },
 
+        removePlantFromNewPlants(index: number) {
+            if (index >= 0 && index < this.newPlants.length) {
+                this.newPlants.splice(index, 1)
+            }
+        },
+
         async uploadPlants() {
             if (this.isUploading) return; // Prevent multiple uploads
 

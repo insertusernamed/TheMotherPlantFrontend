@@ -1,6 +1,6 @@
 <template>
-    <div
-        class="bg-white/60 rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col">
+    <div class="bg-white/60 rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col"
+        @click="$emit('click')">
 
         <div class="h-80 bg-cover bg-center" :style="{ backgroundImage: `url(${imageUrl})` }"></div>
 

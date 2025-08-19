@@ -25,22 +25,29 @@
                 <div v-for="(plant, index) in filteredPlants" :key="plant.id"
                     :style="{ transitionDelay: `${index * 100}ms` }">
                     <PlantCard :common-name="plant.commonName" :scientific-name="plant.genus" :price="plant.price"
-                        :description="plant.description" :tags="plant.tags" :image-url="plant.imageUrl" />
+                        :description="plant.description" :tags="plant.tags" :image-url="plant.imageUrl"
+                        @click="openModal(plant)" class="cursor-pointer hover:scale-101 transition-transform" />
                 </div>
             </TransitionGroup>
 
         </main>
+
+        <PlantModal v-if="selectedPlant" :plant="selectedPlant" :is-visible="isModalVisible" @close="closeModal" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, nextTick } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
 import PlantCard from '@/components/PlantCard.vue';
+import PlantModal from '@/components/PlantModal.vue';
+import type { Plant } from '@/models/Plant';
 
 const plantStore = usePlantStore();
 const searchQuery = ref('');
 const loading = ref(true);
+const selectedPlant = ref<Plant | null>(null);
+const isModalVisible = ref(false);
 
 const filteredPlants = computed(() => {
     const query = searchQuery.value.trim().toLowerCase();
@@ -61,4 +68,19 @@ onMounted(async () => {
     await plantStore.fetchPlants();
     loading.value = false;
 });
+
+const openModal = async (plant: Plant) => {
+    selectedPlant.value = plant;
+    await nextTick();
+    isModalVisible.value = true;
+    document.body.style.overflow = 'hidden';
+};
+
+const closeModal = () => {
+    isModalVisible.value = false;
+    document.body.style.overflow = '';
+    setTimeout(() => {
+        selectedPlant.value = null;
+    }, 300);
+};
 </script>
