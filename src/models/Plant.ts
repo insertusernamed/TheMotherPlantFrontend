@@ -11,6 +11,7 @@ export interface Plant {
 export interface Tag {
     id: number;
     name: string;
+    description?: string;
 }
 
 export interface PlantResponse {

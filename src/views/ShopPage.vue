@@ -32,15 +32,20 @@
                                 <div v-if="showTagSelector"
                                     class="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-sm border border-brand-tan rounded-lg shadow-lg p-4 z-10">
                                     <div class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-                                        <button v-for="tag in sortedTags" :key="tag.id" @click="toggleTagFilter(tag.id)"
-                                            :class="[
+                                        <VTooltip v-for="tag in sortedTags" :key="tag.id">
+                                            <button @click="toggleTagFilter(tag.id)" :class="[
                                                 'px-3 py-1 rounded-full text-sm transition-all duration-200 text-center',
                                                 selectedTagIds.has(tag.id)
                                                     ? 'bg-brand-sage text-white shadow-sm'
                                                     : 'bg-brand-sage/20 text-brand-forest hover:bg-brand-sage/40'
                                             ]">
-                                            {{ tag.name }}
-                                        </button>
+                                                {{ tag.name }}
+                                            </button>
+
+                                            <template #popper>
+                                                {{ tag.description }}
+                                            </template>
+                                        </VTooltip>
                                     </div>
                                     <div class="mt-3 pt-3 border-t border-brand-tan/50 text-center">
                                         <button @click="clearAllTagFilters"
@@ -65,7 +70,8 @@
                                     class="ml-2 w-4 h-4 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12"></path>
+                                            d="M6 18L18 6M6 6l12 12">
+                                        </path>
                                     </svg>
                                 </button>
                             </span>
