@@ -5,7 +5,7 @@
                 <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="$emit('close')"></div>
 
                 <div
-                    class="relative bg-brand-background rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                    class="relative bg-brand-background rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
                     <button @click="$emit('close')"
                         class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 hover:bg-white hover:shadow-lg rounded-full flex items-center justify-center transition-all duration-200 group">
                         <svg class="w-6 h-6 text-brand-text group-hover:text-red-500 transition-colors duration-200"
@@ -15,12 +15,12 @@
                         </svg>
                     </button>
 
-                    <div class="flex flex-col md:flex-row overflow-hidden">
-                        <div class="md:w-1/2 h-64 md:h-auto">
+                    <div class="flex flex-col md:flex-row flex-1 min-h-0">
+                        <div class="md:w-1/2 h-64 md:h-auto flex-shrink-0">
                             <img :src="plant.imageUrl" :alt="plant.commonName" class="w-full h-full object-cover" />
                         </div>
 
-                        <div class="md:w-1/2 p-8 overflow-y-auto">
+                        <div class="md:w-1/2 p-6 md:p-8 overflow-y-auto flex-1">
                             <h2 class="font-serif text-3xl font-bold text-brand-heading mb-2">
                                 {{ plant.commonName }}
                             </h2>
