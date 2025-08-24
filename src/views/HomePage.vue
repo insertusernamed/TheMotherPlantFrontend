@@ -63,7 +63,7 @@ import { computed, onBeforeMount } from 'vue'
 import { usePlantStore } from '@/stores/plantStore'
 import PlantCard from '@/components/PlantCard.vue'
 import heroImageUrl from '@/assets/hero.webp'
-import founderImageUrl from '@/assets/founder2.jpg'
+import founderImageUrl from '@/assets/founder.jpg'
 
 const plantStore = usePlantStore()
 const newAdditions = computed(() => plantStore.latestPlants)
