@@ -172,6 +172,28 @@ export const usePlantStore = defineStore('plant', {
             }
         },
 
+        async deletePlant(id: number) {
+            try {
+                await apiClient.delete(`${import.meta.env.VITE_API_PLANT_LIST}/${id}`);
+                this.plants = this.plants.filter(plant => plant.id !== id);
+                showToast("Plant deleted successfully!", "success");
+            } catch (error) {
+                console.error('Failed to delete plant:', error);
+                showToast("Failed to delete plant. Please try again.", "error");
+            }
+        },
+
+        async duplicatePlant(id: number) {
+            try {
+                await apiClient.post(`${import.meta.env.VITE_API_PLANT_LIST}/${id}/duplicate`);
+                await this.fetchPlants();
+                showToast("Plant duplicated successfully!", "success");
+            } catch (error) {
+                console.error('Failed to duplicate plant:', error);
+                showToast("Failed to duplicate plant. Please try again.", "error");
+            }
+        },
+
         clearSelectedPlantInfo() {
             this.selectedPlantInfo = {
                 commonName: '',
