@@ -88,14 +88,14 @@
                 <p>Loading our beautiful plants...</p>
             </div>
 
-            <div v-else-if="filteredPlants.length === 0" class="text-center text-lg text-brand-text/80">
+            <div v-else-if="!loading && filteredPlants.length === 0" class="text-center text-lg text-brand-text/80">
                 <p>No plants found matching your search. Try another name!</p>
             </div>
 
-            <TransitionGroup v-show="!loading && filteredPlants.length > 0" name="plant" tag="div"
+            <TransitionGroup name="plant" tag="div"
                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                <div v-for="(plant, index) in filteredPlants" :key="plant.id"
-                    :style="{ transitionDelay: `${index * 100}ms` }">
+                <div v-for="(plant, index) in displayedPlants" :key="plant.id"
+                    :style="{ transitionDelay: `${index * 50}ms` }">
                     <PlantCard :common-name="plant.commonName" :scientific-name="plant.genus" :price="plant.price"
                         :description="plant.description" :tags="plant.tags" :image-url="plant.imageUrl"
                         @click="openModal(plant)" class="cursor-pointer hover:scale-101 transition-transform" />
@@ -201,6 +201,10 @@ const getTagNameById = (tagId: number) => {
     const tag = tagStore.tags.find(t => t.id === tagId);
     return tag ? tag.name : 'Unknown';
 };
+
+const displayedPlants = computed(() => {
+    return loading.value ? [] : filteredPlants.value;
+});
 </script>
 
 <style scoped>
