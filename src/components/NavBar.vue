@@ -50,7 +50,7 @@
                             class="block text-lg hover:text-brand-forest transition-colors">
                             Admin
                         </router-link>
-                        <button @click="authStore.logout; closeMobileMenu"
+                        <button @click="handleMobileLogout"
                             class="block text-lg hover:text-brand-forest transition-colors text-left">
                             Logout
                         </button>
@@ -75,5 +75,10 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
     isMobileMenuOpen.value = false
+}
+
+const handleMobileLogout = () => {
+    authStore.logout()
+    closeMobileMenu()
 }
 </script>
