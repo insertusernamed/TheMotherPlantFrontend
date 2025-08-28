@@ -1,5 +1,7 @@
 <template>
     <div class="mb-8">
+        <h2 class="section-title">Step 3: Choose Price</h2>
+
         <div v-if="!plantStore.selectedPlantInfo.price && plantStore.generatedDescriptionsAndPrice?.priceSuggestions"
             class="selection">
             <h3 class="font-serif text-2xl font-bold text-brand-heading mb-6">Choose a price:</h3>
@@ -53,6 +55,28 @@
             </div>
         </div>
 
+        <div v-else-if="!plantStore.selectedPlantInfo.price && (plantStore.generationFailed || !plantStore.generatedDescriptionsAndPrice?.priceSuggestions)"
+            class="space-y-4">
+            <div v-if="plantStore.generationFailed && !plantStore.generatedDescriptionsAndPrice"
+                class="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p class="text-amber-800 mb-2">Automatic price generation failed. Please set a price manually:</p>
+            </div>
+
+            <div class="p-4 bg-white/80 rounded-lg border border-brand-sage">
+                <label for="manual-price" class="block mb-2 font-semibold text-brand-heading">Enter price:</label>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-semibold text-brand-heading">$</span>
+                    <input id="manual-price" v-model="manualPrice" type="number" step="0.01" min="0" placeholder="0.00"
+                        @keyup.enter="submitManualPrice"
+                        class="flex-1 px-3 py-2 border border-brand-tan rounded-lg focus:outline-none focus:border-brand-forest focus:ring-2 focus:ring-brand-forest/20" />
+                    <button @click="submitManualPrice" :disabled="!isValidPrice"
+                        class="bg-brand-sage text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-brand-forest transition-all transform hover:-translate-y-1 disabled:bg-brand-tan disabled:cursor-not-allowed disabled:transform-none">
+                        Set Price
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div v-if="plantStore.selectedPlantInfo.price"
             class="p-6 bg-brand-tan/30 rounded-lg border border-brand-tan/70">
             <div class="mb-4">
@@ -68,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
 
 const plantStore = usePlantStore();
@@ -109,4 +133,9 @@ const resetPrice = () => {
     plantStore.setSelectedPrice(undefined);
     resetManualInput();
 };
+
+onMounted(() => {
+    if (plantStore.generationFailed && !plantStore.generatedDescriptionsAndPrice) {
+    }
+});
 </script>

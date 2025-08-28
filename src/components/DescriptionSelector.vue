@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h2 class="section-title">Step 2: Choose Description</h2>
+
         <div v-if="plantStore.selectedPlantInfo.description"
             class="p-4 bg-brand-sage/20 rounded-lg border border-brand-sage flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <p class="text-brand-text flex-1">{{ plantStore.selectedPlantInfo.description }}</p>
@@ -10,10 +12,17 @@
         </div>
 
         <div v-else class="space-y-4">
-            <div v-for="(desc, index) in plantStore.generatedDescriptionsAndPrice?.descriptions" :key="index"
+            <div v-if="plantStore.generatedDescriptionsAndPrice?.descriptions"
+                v-for="(desc, index) in plantStore.generatedDescriptionsAndPrice.descriptions" :key="index"
                 @click="selectDescription(desc)"
                 class="p-4 bg-white/70 rounded-lg border border-brand-tan/50 cursor-pointer hover:border-brand-sage hover:bg-white transition-all">
                 {{ desc }}
+            </div>
+
+            <div v-if="plantStore.generationFailed && !plantStore.generatedDescriptionsAndPrice"
+                class="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p class="text-amber-800 mb-2">Automatic description generation failed. Please write your own
+                    description:</p>
             </div>
 
             <div class="bg-white/70 rounded-lg border border-brand-tan/50 overflow-hidden">
@@ -43,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
 
 const plantStore = usePlantStore();
@@ -83,4 +92,10 @@ const resetDescription = () => {
     showManualInput.value = true;
     plantStore.setSelectedDescription('');
 };
+
+onMounted(() => {
+    if (plantStore.generationFailed && !plantStore.generatedDescriptionsAndPrice) {
+        showManualInput.value = true;
+    }
+});
 </script>

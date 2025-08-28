@@ -3,7 +3,8 @@
         <PlantIdentification />
 
         <div class="text-center my-6">
-            <button v-if="plantStore.selectedPlantInfo.commonName && !plantStore.isGenerating"
+            <button
+                v-if="plantStore.selectedPlantInfo.commonName && !plantStore.isGenerating && !plantStore.generatedDescriptionsAndPrice && !plantStore.generationFailed"
                 @click="plantStore.generateDescriptionsAndPrice"
                 class="bg-brand-button text-white font-bold py-3 px-8 rounded-lg shadow-md inline-flex items-center justify-center transition-all transform hover:-translate-y-1">
                 <span>Generate Descriptions & Price</span>
@@ -20,9 +21,14 @@
                 </svg>
                 <span>Generating Details...</span>
             </button>
+            <button v-else-if="plantStore.generationFailed" @click="plantStore.generateDescriptionsAndPrice"
+                class="bg-brand-sage text-white font-bold py-3 px-8 rounded-lg shadow-md inline-flex items-center justify-center transition-all transform hover:-translate-y-1">
+                <span>Try Generating Again</span>
+            </button>
         </div>
 
-        <div v-if="plantStore.generatedDescriptionsAndPrice" class="mt-6 pt-6 border-t border-brand-tan/50 space-y-8">
+        <div v-if="plantStore.generatedDescriptionsAndPrice || plantStore.generationFailed"
+            class="mt-6 pt-6 border-t border-brand-tan/50 space-y-8">
             <DescriptionSelector />
             <PriceSelector />
             <TagSelector />

@@ -20,6 +20,7 @@ export const usePlantStore = defineStore('plant', {
         generatedDescriptionsAndPrice: null as GeneratedResponse | null, // results from description and price generation API
         isIdentifying: false, // loading state for plant identification
         isGenerating: false, // loading state for description and price generation
+        generationFailed: false, // tracks if generation failed
         isUploading: false, // loading state for plant upload
     }),
 
@@ -81,6 +82,7 @@ export const usePlantStore = defineStore('plant', {
             }
 
             this.isGenerating = true;
+            this.generationFailed = false;
             try {
                 const formData = new FormData();
                 formData.append('commonName', this.selectedPlantInfo.commonName);
@@ -94,6 +96,10 @@ export const usePlantStore = defineStore('plant', {
                 console.log('Generated description and prices', data);
                 this.generatedDescriptionsAndPrice = data;
                 this.selectedPlantInfo.tags = data.tags;
+            } catch (error) {
+                console.error('Failed to generate descriptions and price:', error);
+                this.generationFailed = true;
+                showToast("Failed to generate descriptions and price. You can still add them manually.", "error");
             } finally {
                 this.isGenerating = false;
             }
@@ -102,10 +108,30 @@ export const usePlantStore = defineStore('plant', {
         removeTag(tagToRemove: string) {
             if (this.generatedDescriptionsAndPrice?.tags) {
                 const index = this.generatedDescriptionsAndPrice.tags.indexOf(tagToRemove);
-
                 if (index > -1) {
                     this.generatedDescriptionsAndPrice.tags.splice(index, 1);
                 }
+            }
+
+            if (this.selectedPlantInfo.tags) {
+                const plantTagIndex = this.selectedPlantInfo.tags.indexOf(tagToRemove);
+                if (plantTagIndex > -1) {
+                    this.selectedPlantInfo.tags.splice(plantTagIndex, 1);
+                }
+            }
+        },
+
+        addTag(tagName: string) {
+            if (!this.selectedPlantInfo.tags) {
+                this.selectedPlantInfo.tags = [];
+            }
+
+            if (!this.selectedPlantInfo.tags.includes(tagName)) {
+                this.selectedPlantInfo.tags.push(tagName);
+            }
+
+            if (this.generatedDescriptionsAndPrice?.tags && !this.generatedDescriptionsAndPrice.tags.includes(tagName)) {
+                this.generatedDescriptionsAndPrice.tags.push(tagName);
             }
         },
 
@@ -208,6 +234,7 @@ export const usePlantStore = defineStore('plant', {
             this.generatedDescriptionsAndPrice = null
             this.isIdentifying = false
             this.isGenerating = false
+            this.generationFailed = false
             this.isUploading = false
         },
 
