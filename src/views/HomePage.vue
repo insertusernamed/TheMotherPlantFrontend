@@ -43,10 +43,11 @@
                     <div class="md:col-span-2 text-center md:text-left">
                         <h2 class="font-serif text-4xl font-bold text-brand-heading">A Note From Our Founder</h2>
                         <p class="mt-4 text-lg max-w-prose">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident in eum dolorem laborum
-                            doloribus nulla rerum officiis, non enim. Quo, enim molestias aspernatur saepe accusantium
-                            assumenda aliquam ab iusto repellat, deleniti eveniet fugit nihil consequatur vitae nesciunt
-                            veritatis optio maiores fuga dolore molestiae nostrum. Ullam porro reiciendis ipsum ad cum!
+                            Hi there! I've been growing plants for years, and what started as a hobby has grown into
+                            something I'm passionate about sharing. I know how overwhelming it can feel to choose the
+                            right plant, so I created this space to help you find the perfect green companion for your
+                            home. Every plant here has been lovingly cared for, and I'm here to help you succeed with
+                            yours too!
                         </p>
                     </div>
                     <div class="w-48 h-48 mx-auto bg-brand-sage rounded-full shadow-lg bg-cover bg-center"
