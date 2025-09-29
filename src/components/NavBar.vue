@@ -9,6 +9,7 @@
 
             <div class="hidden md:flex items-center space-x-5 md:space-x-6">
                 <router-link to="/shop" class="text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+                <router-link to="/about" class="text-lg hover:text-brand-forest transition-colors">About</router-link>
 
                 <div v-if="authStore.isLoggedIn" class="flex items-center space-x-4">
                     <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'"
@@ -44,6 +45,8 @@
                 <div class="px-6 py-4 space-y-4">
                     <router-link to="/shop" @click="closeMobileMenu"
                         class="block text-lg hover:text-brand-forest transition-colors">Shop</router-link>
+                    <router-link to="/about" @click="closeMobileMenu"
+                        class="block text-lg hover:text-brand-forest transition-colors">About</router-link>
 
                     <div v-if="authStore.isLoggedIn" class="space-y-4 pt-2 border-t border-brand-tan/30">
                         <router-link to="/admin" v-if="authStore.user?.role === 'ADMIN'" @click="closeMobileMenu"
