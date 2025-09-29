@@ -32,7 +32,8 @@
                     class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     <div v-for="(plant, index) in newAdditions" :key="plant.id"
                         :style="{ transitionDelay: `${index * 100}ms` }">
-                        <PlantCard :common-name="plant.commonName" :price="plant.price" :image-url="plant.imageUrl" />
+                        <PlantCard :common-name="plant.commonName" :price="plant.price" :image-url="plant.imageUrl"
+                            :tags="plant.tags?.slice(0, 3)" />
                     </div>
                 </TransitionGroup>
 
