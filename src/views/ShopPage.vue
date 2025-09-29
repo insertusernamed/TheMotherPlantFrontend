@@ -13,7 +13,7 @@
                                 class="w-full px-5 py-3 bg-white/80 border border-brand-tan rounded-full focus:outline-none focus:ring-2 focus:ring-brand-sage transition shadow-sm">
                         </div>
 
-                        <div class="relative sm:w-80">
+                        <div class="relative sm:w-80" ref="tagSelectorRef">
                             <button @click="showTagSelector = !showTagSelector"
                                 class="w-full px-5 py-3 bg-white/80 border border-brand-tan rounded-full focus:outline-none focus:ring-2 focus:ring-brand-sage transition shadow-sm text-left flex items-center justify-between">
                                 <span class="text-brand-text/70 truncate">
@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, nextTick } from 'vue';
+import { onMounted, computed, ref, nextTick, onUnmounted } from 'vue';
 import { usePlantStore } from '@/stores/plantStore';
 import { useTagStore } from '@/stores/tagStore';
 import PlantCard from '@/components/PlantCard.vue';
@@ -125,6 +125,7 @@ const selectedPlant = ref<Plant | null>(null);
 const isModalVisible = ref(false);
 const selectedTagIds = ref(new Set<number>());
 const showTagSelector = ref(false);
+const tagSelectorRef = ref<HTMLElement | null>(null);
 
 const filteredPlants = computed(() => {
     const query = searchQuery.value.trim().toLowerCase();
@@ -159,7 +160,19 @@ onMounted(async () => {
     await plantStore.fetchPlants();
     await tagStore.fetchTags();
     loading.value = false;
+
+    document.addEventListener('click', handleClickOutside);
 });
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
+
+const handleClickOutside = (event: MouseEvent) => {
+    if (showTagSelector.value && tagSelectorRef.value && !tagSelectorRef.value.contains(event.target as Node)) {
+        showTagSelector.value = false;
+    }
+};
 
 const openModal = async (plant: Plant) => {
     selectedPlant.value = plant;
